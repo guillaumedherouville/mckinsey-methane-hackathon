@@ -18,3 +18,7 @@ methane-hackathon
 ┣ .gitignore
 ┗ README.md
 ````
+
+# TODO
+Add CI/CD
+Add App
