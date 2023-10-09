@@ -19,8 +19,6 @@ methane-hackathon
 ┣ .gitignore
 ┣ README.md
 ┗ requirements.txt 
-
-
 ````
 
 # TODO
