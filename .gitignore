@@ -28,6 +28,12 @@ share/python-wheels/
 MANIFEST
 
 /data
+.Rhistory
+.DS_Store
+
+
+
+
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
