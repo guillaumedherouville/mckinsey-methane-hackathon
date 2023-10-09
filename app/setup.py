@@ -50,7 +50,7 @@ class GUI:
 
         self.dataSource = st.sidebar.radio(
             "Please select the source of your image :",
-            ["Demo", "Upload", "TBD"],
+            ["TBD", "Upload", "Demo"],
         )
 
         # Get the application from the GUI
