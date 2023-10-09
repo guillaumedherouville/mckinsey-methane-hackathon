@@ -6,7 +6,7 @@ import datetime
 import urllib
 import time
 import cv2 as cv
-from app.set-up import GUI #, AppManager, DataManager
+from app.setup import GUI, DataManager
 
 # ------------------------------------------------------#
 # ------------------------------------------------------#
@@ -16,6 +16,9 @@ def imageWebApp(guiParam):
     # Load the image according to the selected option
     conf = DataManager(guiParam)
     image = conf.load_image_source()
+    left_co, cent_1_co, cent_2_co, last_co = st.columns(4)
+    with cent_1_co:
+        st.image(image, width=300)
 
 def main():
     """ """
@@ -26,5 +29,4 @@ def main():
 # ------------------------------------------------------#
 # ------------------------------------------------------#
 
-if __name__ == "methane-detection-app":
-    main()
+main()
