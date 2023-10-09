@@ -21,4 +21,3 @@ methane-hackathon
 
 # TODO
 Add CI/CD
-Add App
