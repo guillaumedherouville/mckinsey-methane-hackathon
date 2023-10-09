@@ -22,4 +22,4 @@ methane-hackathon
 ````
 
 # TODO
-Add CI/CD
+Create tests
