@@ -142,7 +142,6 @@ class DataManager:
             @st.cache_data()
             def load_image_from_path(image_path):
                 image = cv.imread(image_path, cv.IMREAD_COLOR)
-                # image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
                 return image
 
             file_path_idx = st.selectbox(
@@ -161,16 +160,17 @@ class DataManager:
                 tmp = np.fromstring(file.read(), np.uint8)
                 return cv.imdecode(tmp, 1)
 
-            file_path = st.file_uploader("Upload an image", type=["png", "jpg"])
+            file_path = st.file_uploader("Upload an image", type=["png", "jpg", "tif"])
 
             if file_path is not None:
                 self.image = load_image_from_upload(file_path)
+
             elif file_path is None:
-                raise ValueError("[Error] Please upload a valid image ('png', 'jpg')")
+                st.info("Please upload an image (format = 'png', 'jpg', 'tif')")
             # --------------------------------------------#
             # --------------------------------------------#
 
         else:
-            raise ValueError("Please select one source from the list")
+            st.info("Please select one source from the list")
 
         return self.image

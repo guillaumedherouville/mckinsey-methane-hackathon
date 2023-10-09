@@ -18,7 +18,10 @@ def imageWebApp(guiParam):
     image = conf.load_image_source()
     left_co, cent_1_co, cent_2_co, last_co = st.columns(4)
     with cent_1_co:
-        st.image(image, width=300)
+        try:
+            st.image(image, width=300)
+        except:
+            pass
 
 def main():
     """ """
