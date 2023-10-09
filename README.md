@@ -6,6 +6,7 @@ Here is the structure :
 
 ````
 methane-hackathon
+┣ app/ --> hosts the streamlit webapp
 ┣ data/ --> for all data files during development
 ┃ ┣ interim/
 ┃ ┣ processed/
@@ -16,7 +17,10 @@ methane-hackathon
 ┃ ┗ test.py
 ┣ utils/ --> for utils functions
 ┣ .gitignore
-┗ README.md
+┣ README.md
+┗ requirements.txt 
+
+
 ````
 
 # TODO
