@@ -1,9 +1,10 @@
-# methane-hackathon
+# Methane-hackathon
 A methane detection project using satellite images
 
-# structure
+# Structure
 Here is the structure : 
 
+````
 methane-hackathon
 ┣ data/ --> for all data files during development
 ┃ ┣ interim/
