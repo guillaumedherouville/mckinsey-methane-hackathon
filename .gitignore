@@ -27,7 +27,8 @@ share/python-wheels/
 
 MANIFEST
 
-/data
+/data/*
+!/data/dataset
 .Rhistory
 .DS_Store
 
