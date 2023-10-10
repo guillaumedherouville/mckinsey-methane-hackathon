@@ -1,1 +1,8 @@
-
+imutils==0.5.4
+matplotlib==3.8.0
+numpy==1.26.0
+opencv_python==4.8.1.78
+pandas==2.1.1
+Pillow==10.0.1
+streamlit==1.27.2
+wget==3.2

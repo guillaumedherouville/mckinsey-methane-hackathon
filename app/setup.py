@@ -1,18 +1,6 @@
-import datetime
-import hashlib
-import os
-import time
-import urllib
-
 import cv2 as cv
 import numpy as np
-import pafy
-import pandas as pd
 import streamlit as st
-import wget
-import youtube_dl
-from imutils.video import FPS, FileVideoStream, WebcamVideoStream
-from PIL import Image
 
 
 class GUI:
@@ -109,6 +97,7 @@ class GUI:
         )
 
         self.guiParam.update(dict(confThresh=confThresh, model=model))
+
 
 # ------------------------------------------------------------------
 # ------------------------------------------------------------------
