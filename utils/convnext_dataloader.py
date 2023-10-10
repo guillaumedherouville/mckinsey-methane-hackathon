@@ -8,11 +8,15 @@ from torchvision.transforms import transforms
 
 from .mapping import CLASS_LABEL_MAP
 
+# Normalization of an uint16 image.
+_BASE_TRANSFORM = transforms.Lambda(lambda image: torch.from_numpy(image / 65535).unsqueeze(0))
+
 
 class CustomDataset(Dataset):
-    def __init__(self, root_dir):
-        # Custom 'ToTensor' transform for the uint15 tiff images.
-        self.transform = transforms.Lambda(lambda image: torch.from_numpy(image / 65535))
+    def __init__(self, root_dir, n_channels=1, transform=None):
+        # Custom 'ToTensor' transform for the uint16 tiff images.
+        self.n_channels = n_channels
+        self.transform = transform if transform else _BASE_TRANSFORM
 
         self.folders = list(CLASS_LABEL_MAP.keys())
         self.image_paths = list()
@@ -34,7 +38,8 @@ class CustomDataset(Dataset):
         img = cv2.imread(path, -1)
 
         if self.transform:
-            img = self.transform(img)
+            img = torch.Tensor(self.transform(img))
+
+        img = img.repeat(self.n_channels, 1, 1)
 
         return img, label
-
