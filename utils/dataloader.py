@@ -21,6 +21,7 @@ class LoadData:
 
         self.meta_df = pd.read_csv(self.metadata_path)
         self.meta_df["path"] = self.meta_df['path'].astype(str) + '.tif'
+        self.meta_df["date"] = pd.to_datetime(self.meta_df["date"].apply(lambda x:str(x)))
         # Loop through the metadata and load images
         for index, row in self.meta_df.iterrows():
             image_path = row['path']
@@ -85,7 +86,7 @@ class LoadData:
         max_val = image_data.max()
         return (image_data - min_val) / (max_val - min_val)
 
-    def prep_data(self, augment: bool = True, normalize: bool = True, group_split=True, test_size=0.2, batch_size=32, seed=123):
+    def prep_data(self, augment: bool = True, normalize: bool = True, group_split:bool=True, test_size=0.2, batch_size=32, seed=123):
         X, y = self.get_train_data()
         if normalize:
             X = self.normalize_data(X)
