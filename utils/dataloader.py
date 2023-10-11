@@ -2,15 +2,17 @@ import numpy as np
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import rasterio
 import pandas as pd
-from sklearn.model_selection import GroupShuffleSplit
+from sklearn.model_selection import GroupShuffleSplit, train_test_split
 
 
 class LoadData:
     def __init__(self,
                 metadata_path="methane-hackathon/data/train_data/metadata.csv",
-                image_data_path="methane-hackathon/data/train_data/"):
+                image_data_path="methane-hackathon/data/train_data/",
+                seed=1234):
         self.metadata_path = metadata_path
         self.image_data_path = image_data_path
+        self.seed = seed
 
     
     def get_train_data(self):
@@ -86,11 +88,14 @@ class LoadData:
         return (image_data - min_val) / (max_val - min_val)
     
 
-    def prep_data(self, augment:bool=True, normalize:bool=True):
+    def prep_data(self, augment:bool=True, normalize:bool=True, group_split=True, seed=123):
         X, y = self.get_train_data()
         if normalize:
             X = self.normalize_data(X)
-        X_train, X_test, y_train, y_test = self.group_split(X, y, test_size=0.2)
+        if group_split:
+            X_train, X_test, y_train, y_test = self.group_split(X, y, test_size=0.2)
+        else:
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
         if augment:
             X_train_aug, y_train_aug = self.augment_data(X_train, y_train, n_epochs=32)
             return X_train_aug, y_train_aug, X_test, y_test
