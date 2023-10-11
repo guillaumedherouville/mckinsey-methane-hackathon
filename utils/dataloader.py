@@ -48,7 +48,7 @@ class LoadData:
 
     def group_split(self, X, y, test_size=0.2):
         groups = self.meta_df["id_coord"]
-        group_split = GroupShuffleSplit(n_splits=1, test_size=test_size, random_state=123)
+        group_split = GroupShuffleSplit(n_splits=1, test_size=test_size, random_state=self.seed)
         for i, (train_index, test_index) in enumerate(group_split.split(X, y, groups)):
             X_train, y_train = X[train_index], y[train_index]
             X_test, y_test = X[test_index], y[test_index]
@@ -95,8 +95,8 @@ class LoadData:
         if group_split:
             X_train, X_test, y_train, y_test = self.group_split(X, y, test_size=0.2)
         else:
-            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=seed)
         if augment:
             X_train_aug, y_train_aug = self.augment_data(X_train, y_train, n_epochs=32)
-            return X_train_aug, y_train_aug, X_test, y_test
-        return X_train, y_train, X_test, y_test
+            return X_train_aug, X_test, y_train_aug, y_test
+        return X_train, X_test, y_train, y_test
