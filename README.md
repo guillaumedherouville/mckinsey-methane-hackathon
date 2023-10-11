@@ -32,7 +32,7 @@ pip install -r requirements.txt
 ```
 
 ## Running the Streamlit App locally
-
+- Insert instructions here to run the streamlit app
 
 ## TODO
 Create tests
