@@ -2,6 +2,7 @@ import numpy as np
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import rasterio
 import pandas as pd
+from sklearn.model_selection import GroupShuffleSplit
 
 
 class LoadData:
@@ -17,10 +18,10 @@ class LoadData:
         image_data = []
         plume_labels = []
 
-        meta_df = pd.read_csv(self.metadata_path)
-        meta_df["path"] = meta_df['path'].astype(str) + '.tif'
+        self.meta_df = pd.read_csv(self.metadata_path)
+        self.meta_df["path"] = self.meta_df['path'].astype(str) + '.tif'
         # Loop through the metadata and load images
-        for index, row in meta_df.iterrows():
+        for index, row in self.meta_df.iterrows():
             image_path = row['path']
             plume_label = row['plume']
 
@@ -42,6 +43,15 @@ class LoadData:
         
         return image_data, plume_labels
     
+
+    def group_split(self, X, y, test_size=0.2):
+        groups = self.meta_df["id_coord"]
+        group_split = GroupShuffleSplit(n_splits=1, test_size=test_size, random_state=123)
+        for i, (train_index, test_index) in enumerate(group_split.split(X, y, groups)):
+            X_train, y_train = X[train_index], y[train_index]
+            X_test, y_test = X[test_index], y[test_index]
+        return X_train, X_test, y_train, y_test
+            
     
     def augment_data(self, X_train, y_train, n_epochs):
         datagen = ImageDataGenerator(
@@ -74,4 +84,14 @@ class LoadData:
         min_val = image_data.min()
         max_val = image_data.max()
         return (image_data - min_val) / (max_val - min_val)
+    
 
+    def prep_data(self, augment:bool=True, normalize:bool=True):
+        X, y = self.get_train_data()
+        if normalize:
+            X = self.normalize_data(X)
+        X_train, X_test, y_train, y_test = self.group_split(X, y, test_size=0.2)
+        if augment:
+            X_train_aug, y_train_aug = self.augment_data(X_train, y_train, n_epochs=32)
+            return X_train_aug, y_train_aug, X_test, y_test
+        return X_train, y_train, X_test, y_test
