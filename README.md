@@ -1,7 +1,7 @@
 # Methane-hackathon
 A methane detection project using satellite images
 
-# Structure
+## Structure
 Here is the structure : 
 
 ````
@@ -21,5 +21,18 @@ methane-hackathon
 ┗ requirements.txt 
 ````
 
-# TODO
+##  Requirements
+
+### System Requirements
+- Python 3.9 or higher
+
+### Packages
+```setup
+pip install -r requirements.txt
+```
+
+## Running the Streamlit App locally
+
+
+## TODO
 Create tests
