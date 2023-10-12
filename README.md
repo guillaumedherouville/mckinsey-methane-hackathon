@@ -25,6 +25,7 @@ methane-hackathon
 ┣ logs/ --> stores models & results 
 ┣ models/ --> store models 
 ┣ notebooks/ --> for exploration and trial
+┣ trainig_pipelines/ --> training models from the terminal
 ┣ output/ --> submission file
 ┣ tests/ --> for smooth CI/CD
 ┣ utils/ --> useful misc scripts
