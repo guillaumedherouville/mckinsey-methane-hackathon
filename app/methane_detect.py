@@ -90,7 +90,7 @@ def heatmap_box(running_model, image):
         image (numpy.ndarray): The input image as a NumPy array.
     """
 
-    from heatmap import heatmap
+    from heatmap import  heatmap
     # Find the last convolutional layer in the model
     last_conv_layer = None
     for layer in running_model.layers[::-1]:
