@@ -2,8 +2,6 @@
 A methane detection project using satellite images
 
 -> View the documentation on [Github Pages](https://guillaumedherouville.github.io/mckinsey-methane-hackathon/)
-  
--> Run the app on https:// 
 
 ##  Requirements
 

@@ -1,8 +1,8 @@
 # Streamlit App
 The following page introduces the streamlit app and its basic functions
 
-The app is available at : 
-https:// ....
+You can run the app with ```streamlit run app/streamlit-app.py``` in your terminal.
+
 ## Description
 The app is divided in three portals :
 
