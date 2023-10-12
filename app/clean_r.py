@@ -4,11 +4,11 @@ import streamlit as st
 import pandas as pd
 from map_app import display_historical_data_for_city
 
-OPEN_AI_KEY = ""
-openai.api_key = OPEN_AI_KEY
+OPEN_API_KEY = ""
 
 
-def generate_manufacturers_list_from_location(latitude, longitude, city):
+def generate_manufacturers_list_from_location(latitude, longitude, city, api_key):
+    openai.api_key = api_key
     if city is None:
         prompt = (
             f"I will give you latitude and longitude, i want you to say the name of the city or region and give me lists of 3 main compnaies-manufacturers in that region.\n\n"
@@ -56,7 +56,8 @@ def generate_manufacturers_list_from_location(latitude, longitude, city):
     return region, manufacturers
 
 
-def generate_regulators_list_from_location(latitude, longitude, city):
+def generate_regulators_list_from_location(latitude, longitude, city, api_key):
+    openai.api_key = api_key
     if city is None:
         prompt = (
             f"I will give you latitude and longitude, i want you to give me lists of 3 ESG regulators and lists of 3 research institutions that may be responsible for this region and may be interested in methane detection. \n\n"
@@ -110,7 +111,7 @@ def generate_regulators_list_from_location(latitude, longitude, city):
     return regulators, researchers
 
 
-def discover_location(latitude, longitude, city):
+def discover_location(latitude, longitude, city, api_key):
     loading_message = (
         f"Discovering oportunities in {city}..."
         if city is not None
@@ -118,14 +119,14 @@ def discover_location(latitude, longitude, city):
     )
     with st.spinner(loading_message):
         region_name, manufacturers_list = generate_manufacturers_list_from_location(
-            latitude, longitude, city
+            latitude, longitude, city, api_key
         )
     if city is None:
         st.markdown(f"Region: {region_name}")
     st.markdown(f"List of main manufacturers in this region:\n {manufacturers_list}")
     with st.spinner(loading_message):
         regulators_list, researchers_list = generate_regulators_list_from_location(
-            latitude, longitude, city
+            latitude, longitude, city, api_key
         )
     st.markdown(f"List of main ESG regulators in this region:\n {regulators_list}")
     st.markdown(
@@ -134,6 +135,7 @@ def discover_location(latitude, longitude, city):
 
 
 def cleanr_display():
+    api_key = ""
     st.title("CleanR Workspace")
 
     """
@@ -163,10 +165,18 @@ def cleanr_display():
         # Button to trigger the discovery of a new location
         if st.button("Discover New Location"):
             if latitude is not None and longitude is not None:
-                if OPEN_AI_KEY == "":
-                    st.warning("Please set you API_KEY to access new location discovery.")
+                if api_key == "":
+                    st.warning(
+                        "Please set you API_KEY to access new location discovery."
+                    )
+                    api_key = st.text_input("Enter a key:")
+                    if st.button("Submit Key"):
+                        if api_key != "":
+                            discover_location(latitude, longitude, None, api_key)
+                        else:
+                            st.warning("Please enter a valid key.")
                 else:
-                    discover_location(latitude, longitude, None)
+                    discover_location(latitude, longitude, None, api_key)
             else:
                 st.warning(
                     "Please fill in both latitude and longitude before discovering a new location."
@@ -174,9 +184,16 @@ def cleanr_display():
 
     else:
         display_historical_data_for_city(location_option, cities_data, df)
-        if OPEN_AI_KEY == "":
+        if api_key == "":
             st.warning(
-                f"Please set you API_KEY discover oppportunities in {location_option}."
+                f"Please set you API_KEY to discover oppportunities in {location_option}."
             )
+            api_key = st.text_input("Enter a key:")
+            if st.button("Submit Key"):
+                if api_key != "":
+                    discover_location(None, None, location_option, api_key)
+                else:
+                    st.warning("Please enter a valid key.")
+
         else:
-            discover_location(None, None, location_option)
+            discover_location(None, None, location_option, api_key)
