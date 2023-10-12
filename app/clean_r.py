@@ -11,7 +11,7 @@ def generate_manufacturers_list_from_location(latitude, longitude, city, api_key
     openai.api_key = api_key
     if city is None:
         prompt = (
-            f"I will give you latitude and longitude, i want you to say the name of the city or region and give me lists of 3 main compnaies-manufacturers in that region.\n\n"
+            f"I will give you latitude and longitude, i want you to say the name of the city or region and give me lists of 3 main companies-manufacturers in that region.\n\n"
             f"Latitude: {latitude}\n"
             f"Longitude: {longitude}\n\n"
             f"Desired format:\nRegion:\n"
@@ -19,7 +19,7 @@ def generate_manufacturers_list_from_location(latitude, longitude, city, api_key
         )
     else:
         prompt = (
-            f"I will give you city, i want you to say the name of the city or region and give me lists of 3 main compnaies-manufacturers in that region.\n\n"
+            f"I will give you city, i want you to say the name of the city or region and give me lists of 3 main companies-manufacturers in that region.\n\n"
             f"City: {city}\n\n"
             f"Desired format:\nRegion:\n"
             f"List of manufacturers in this area:\n"
@@ -188,7 +188,7 @@ def cleanr_display():
                 )
 
     else:
-        api_key = st.text_input("Enter you API_KEY to access new location discovery:")
+        api_key = st.text_input("Enter you API_KEY to access new location discovery:", type='password')
         if api_key == "":
             st.warning("Please set you API_KEY to access new location discovery.")
         else:
