@@ -22,7 +22,8 @@ def display_city_name(city, city_data, data):
     city_data = data[(data["lat"] == latitude) & (data["lon"] == longitude)]
     city_data["date"] = pd.to_datetime(city_data["date"], format="%Y%m%d")
     st.dataframe(city_data)
-    city_data["plume"] = city_data["plume"].apply(lambda x: 1 if x == "yes" else 0)
+    city_data["plume"] = city_data["plume"].apply(
+        lambda x: 1 if x == "yes" else 0)
     city_data = city_data.sort_values(by="date")
     plt.figure(figsize=(10, 4))
     plt.plot(city_data["date"], city_data["plume"], marker="o")
@@ -63,7 +64,8 @@ def historical_data():
             plume_yes_df, use_container_width=True
         )  # Display the map with plume = yes
     else:
-        st.map(plume_no_df, use_container_width=True)  # Display the map with plume = no
+        # Display the map with plume = no
+        st.map(plume_no_df, use_container_width=True)
 
     # Extract unique cities from the train data
     cities_data = pd.read_csv("locations_with_cities.csv")
@@ -84,7 +86,8 @@ def historical_data():
         default_latitude = 48.8566  # Default latitude for Paris
         default_longitude = 2.3522  # Default longitude for Paris
         latitude = st.number_input("Enter Latitude:", value=default_latitude)
-        longitude = st.number_input("Enter Longitude:", value=default_longitude)
+        longitude = st.number_input(
+            "Enter Longitude:", value=default_longitude)
         display_map_with_location(latitude, longitude)
 
     else:
