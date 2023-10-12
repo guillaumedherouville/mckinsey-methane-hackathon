@@ -15,7 +15,7 @@ class ClassificationHead(nn.Module):
         self.linear_2 = nn.Linear(in_features=1024, out_features=128)
         self.linear_3 = nn.Linear(in_features=128, out_features=n_classes)
 
-    def forward(self, x: torch.Tesnor) -> torch.Tensor:
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Perform forward step.
 
         @param x: The input tensor.

@@ -12,7 +12,7 @@ class ConvNeXtBase(nn.Module):
         self.model = convnext_base(*args, **kwargs)
         self.model.classifier[2] = ClassificationHead(in_features=1024, n_classes=1)
 
-    def forward(self, x: torch.Tesnor) -> torch.Tensor:
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Perform forward step.
 
         @param x: The input tensor.
