@@ -1,20 +1,25 @@
 import os
 import glob
+from typing import Union, Tuple
 
 import cv2
 import torch
+from torch.nn import Module
 from torch.utils.data import Dataset
-from torchvision.transforms import transforms
+from torchvision.transforms import transforms, Compose
 
 from .mapping import CLASS_LABEL_MAP
 
-# Normalization of an uint16 image.
-_BASE_TRANSFORM = transforms.Compose([
+
+# Normalization and type casting.
+BASE_TRANSFORM = transforms.Compose([
     transforms.Lambda(lambda image: torch.from_numpy(image / 65535).unsqueeze(0).repeat(3, 1, 1)),
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
-_BASE_AUGMENTATION = transforms.Compose([
+
+# Geometric transformations for an augmentation.
+BASE_AUGMENTATION = transforms.Compose([
     transforms.RandomHorizontalFlip(p=0.5),
     transforms.RandomVerticalFlip(p=0.5),
     transforms.RandomRotation(degrees=15),
@@ -26,32 +31,45 @@ _BASE_AUGMENTATION = transforms.Compose([
 
 
 class PlumesDataset(Dataset):
-    def __init__(self, root_dir, is_train=True, transform=None, augment=False):
-        # Custom 'ToTensor' transform for the uint16 tiff images.
-        self.is_train = is_train
-        if self.is_train:
-            sub_dir = "train"
-        else:
-            sub_dir = "test"
+    """PyTorch dataset to load and transform plumes images and related target labels.
 
-        self.transform = transform if transform else _BASE_TRANSFORM
+    @param: root_dir: The root directory, where the data is located. Must contain sub-dirs 'train' and 'test'.
+    @param: is_train: The flag, signifying if to load 'train' set. If false, loads 'test' set.
+    @param transform: The PyTorch transform applied to the image. By default, is set to the 'BASE_TRANSFORM'.
+    @param augment: The flag, signifying if to augment image. Is applied independently of the 'transform'.
+    """
 
+    def __init__(self,
+                 root_dir: str, is_train: bool = True, transform: Union[Compose, Module] = None, augment: bool = False):
+        super().__init__()
+        sub_dir = "train" if is_train else "test"
+
+        self.transform = transform if transform else BASE_TRANSFORM
         self.augment = augment
-        self.augmentation_transform = _BASE_AUGMENTATION
 
         self.folders = list(CLASS_LABEL_MAP.keys())
         self.image_paths = list()
         self.image_labels = list()
 
+        # Prefetch paths to images of all classes.
         for label, img_class in enumerate(self.folders):
             class_images_paths = glob.glob(os.path.join(root_dir, sub_dir, img_class, "*.tif"))
             self.image_paths.extend(class_images_paths)
             self.image_labels.extend([float(label)] * len(class_images_paths))
 
-    def __len__(self):
+    def __len__(self) -> int:
+        """Get the number of samples in the dataset.
+
+        @return: The number of samples in the dataset.
+        """
         return len(self.image_paths)
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx) -> Tuple[torch.Tensor, float]:
+        """Get the sample from the dataset by the index.
+
+        @param idx: Index of the sample in the dataset.
+        @return: Transformed (+ augmented) image and related target value.
+        """
         label = self.image_labels[idx]
         path = self.image_paths[idx]
 
@@ -62,6 +80,6 @@ class PlumesDataset(Dataset):
             img = self.transform(img)
 
         if self.augment:
-            img = self.augmentation_transform(img)
+            img = BASE_AUGMENTATION(img)
 
         return img, label

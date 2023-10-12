@@ -180,7 +180,6 @@ def _init_model(train_config: Namespace) -> Module:
 
 def main(train_config: Namespace) -> None:
     """
-
     @param train_config: The training pipeline config. Controls the training process.
     @return: Nothing.
     """
