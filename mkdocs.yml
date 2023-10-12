@@ -1,5 +1,8 @@
-site_name: My Docs
+site_name: Methane detection project
 
 nav:
   - ReadMe : index.md
   - App : app_doc.md
+
+theme:
+  name: 'material'
