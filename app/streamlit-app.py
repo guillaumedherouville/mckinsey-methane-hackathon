@@ -41,7 +41,7 @@ def main():
         historical_data()
     elif display_option == "Methane Detection":
         methane_detection()
-    elif display_option == "CleanR":
+    elif display_option == "CleanR Workspace":
         cleanr_display()
 
 
