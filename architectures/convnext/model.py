@@ -6,12 +6,18 @@ from ..cls_head import ClassificationHead
 
 
 class ConvNeXtBase(nn.Module):
+    """ConvNeXt-base model adaptation."""
     def __init__(self, *args, **kwargs):
         super().__init__()
         self.model = convnext_base(*args, **kwargs)
         self.model.classifier[2] = ClassificationHead(in_features=1024, n_classes=1)
 
-    def forward(self, x):
+    def forward(self, x: torch.Tesnor) -> torch.Tensor:
+        """Perform forward step.
+
+        @param x: The input tensor.
+        @return: The output logit.
+        """
         logit = self.model(x)
         return logit
 

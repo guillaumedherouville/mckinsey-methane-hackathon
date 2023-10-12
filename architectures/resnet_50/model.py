@@ -6,12 +6,18 @@ from ..cls_head import ClassificationHead
 
 
 class ResNet50(nn.Module):
+    """ResNet50 model adaptation."""
     def __init__(self, *args, **kwargs):
         super().__init__()
         self.model = resnet50(*args, **kwargs)
         self.model.fc = ClassificationHead(in_features=2048, n_classes=1)
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Perform forward step.
+
+        @param x: The input tensor.
+        @return: The output logit.
+        """
         logit = self.model(x)
         return logit
 
