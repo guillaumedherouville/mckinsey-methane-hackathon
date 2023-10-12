@@ -12,37 +12,56 @@ def get_lat_lon(city_name, data):
 
 
 def display_historical_data_for_city(city, city_data, data):
-    """
-    need to prettify the plot
-    """
-    st.markdown(f"Selected City: {city}")
+    if city == "Example (mock data): Paris":
+        city_data = dummydata()
+        city_data["date"] = pd.to_datetime(city_data["date"])
+        # city_data["date"] = pd.to_datetime(dummy_data["date"])
+        st.markdown(f"🚨 Methane was detected in {city} 🚨")
+    else:
+        latitude, longitude = get_lat_lon(city, city_data)
+        city_data = data[(data["lat"] == latitude) & (data["lon"] == longitude)]
 
-    latitude, longitude = get_lat_lon(city, city_data)
-    st.map(data={"LAT": [latitude], "LON": [longitude]})
-    city_data = data[(data["lat"] == latitude) & (data["lon"] == longitude)]
-    city_data["date"] = pd.to_datetime(city_data["date"], format="%Y%m%d")
-    st.dataframe(city_data[["date", "lat", "lon", "plume"]])
-    if len(city_data[city_data["plume"] == "yes"]) == 0:
-        st.markdown(f"The presence of methane was never detected at this location! 🥳")
-    if len(city_data[city_data["plume"] == "no"]) == 0:
-        st.markdown(f"The presence of methane is stable in this region 😔")
-    if (
-        len(city_data[city_data["plume"] == "no"]) > 0
-        and city_data[city_data["date"] == city_data["date"].max()]["plume"].values[0]
-        == "yes"
-    ):
-        st.markdown(f"🚨 Methane was detected in this area recently 🚨")
+        city_data["date"] = pd.to_datetime(city_data["date"], format="%Y%m%d")
 
-    city_data["plume"] = city_data["plume"].apply(lambda x: 1 if x == "yes" else 0)
+        if len(city_data[city_data["plume"] == "yes"]) == 0:
+            st.markdown(
+                f"The presence of methane was never detected at this location in {city}! 🥳"
+            )
+        if len(city_data[city_data["plume"] == "no"]) == 0:
+            st.markdown(
+                f"The presence of methane is stable at this location in {city} 😔"
+            )
+        if (
+            len(city_data[city_data["plume"] == "no"]) > 0
+            and city_data[city_data["date"] == city_data["date"].max()]["plume"].values[
+                0
+            ]
+            == "yes"
+        ):
+            st.markdown(f"🚨 Methane was detected in {city} 🚨")
+
+        city_data["plume"] = city_data["plume"].apply(lambda x: 1 if x == "yes" else 0)
     city_data = city_data.sort_values(by="date")
-    plt.plot(figsize=(10, 4))
-    plt.plot(city_data["date"], city_data["plume"], marker="o")
-    plt.title(f"Methane Detection over Time in {city}")
-    plt.xlabel("Date")
-    plt.ylabel("Plume (1 for yes, 0 for no)")
-    plt.grid()
-    plt.show()
-    st.pyplot(plt)
+    city_data = city_data[["date", "lat", "lon", "plume"]]
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        if city == "Example (mock data): Paris":
+            st.map(data=city_data)
+        else:
+            st.map(data={"LAT": [latitude], "LON": [longitude]})
+
+    with col2:
+        st.dataframe(city_data)
+        plt.plot(figsize=(10, 4))
+        plt.plot(city_data["date"], city_data["plume"], marker="o")
+        plt.title(f"Methane Detection over Time in {city}")
+        plt.xlabel("Date")
+        plt.ylabel("Plume (1 for yes, 0 for no)")
+        plt.grid()
+        plt.show()
+        st.pyplot(plt)
 
 
 def display_map_with_location(latitude, longitude):
@@ -71,24 +90,24 @@ def dummydata():
     return data
 
 
-def display_city_name_1(city, city_data):
-    """
-    need to prettify the plot
-    """
-    st.markdown(f"Selected City: {city}")
-    st.map(data=city_data)
-    st.dataframe(city_data)
-    city_data["date"] = pd.to_datetime(city_data["date"])
-    city_data["plume"] = city_data["plume"].apply(lambda x: 1 if x == "yes" else 0)
-    city_data = city_data.sort_values(by="date")
-    plt.figure(figsize=(10, 4))
-    plt.plot(city_data["date"], city_data["plume"], marker="o")
-    plt.title(f"Methane Detection over Time in {city}")
-    plt.xlabel("Date")
-    plt.ylabel("Plume (1 for yes, 0 for no)")
-    plt.grid()
-    plt.show()
-    st.pyplot(plt)
+# def display_city_name_1(city, city_data):
+#     """
+#     need to prettify the plot
+#     """
+#     st.markdown(f"Selected City: {city}")
+#     st.map(data=city_data)
+#     st.dataframe(city_data)
+#     city_data["date"] = pd.to_datetime(city_data["date"])
+#     city_data["plume"] = city_data["plume"].apply(lambda x: 1 if x == "yes" else 0)
+#     city_data = city_data.sort_values(by="date")
+#     plt.figure(figsize=(10, 4))
+#     plt.plot(city_data["date"], city_data["plume"], marker="o")
+#     plt.title(f"Methane Detection over Time in {city}")
+#     plt.xlabel("Date")
+#     plt.ylabel("Plume (1 for yes, 0 for no)")
+#     plt.grid()
+#     plt.show()
+#     st.pyplot(plt)
 
 
 def historical_data():
@@ -148,10 +167,9 @@ def historical_data():
 
     if location_option == "Select Location":
         st.info("Please choose a location")
-    elif location_option == "Example (mock data): Paris":
-        mock_data = dummydata()
-        display_city_name_1("Mock data - Paris", mock_data)
-        """add dummy data with both plum and no plum that plot looks good"""
+    # elif location_option == "Example (mock data): Paris":
+    #     mock_data = dummydata()
+    #     display_city_name_1("Mock data - Paris", mock_data)
     elif location_option == "Find Location":
         default_latitude = 48.8566  # Default latitude for Paris
         default_longitude = 2.3522  # Default longitude for Paris
