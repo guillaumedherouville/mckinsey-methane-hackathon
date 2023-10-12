@@ -136,6 +136,21 @@ def cleanr_display():
     api_key = ""
     st.title("CleanR Workspace")
 
+    st.info(
+        f"Welcome to CleanR Workspace!\n"
+        f"Here, we provide a comprehensive repository of analyzed data, both from past assessments and new locations. "
+        f"Whether you're looking to explore previously examined areas or discover fresh sites, "
+        f"we offer you valuable insights into potential methane clients.\n\n"
+        f"The potential beneficiaries of methane detection model can be categorized into three main groups:\n"
+        f"1. Manufacturers: For businesses in the energy sector, staying compliant with Environmental, Social, and Governance standards is vital."
+        f"The data can help them monitor methane emissions, attract investment, and enhance operational efficiency.\n\n"
+        f"2. Regulators: Regulators play a crucial role in ensuring that producers adhere to environmental regulations. "
+        f"Our platform assists regulators in cross-checking reported methane emissions, supporting their efforts in upholding compliance standards.\n\n"
+        f"3. Research Institutions: For academic and research institutions, tracking and studying methane leakages "
+        f"are essential in understanding environmental patterns and resource utilization. "
+        f"Our data enables research institutions to explore, analyze, and gain insights into methane emissions and leakages."
+    )
+
     """
     add some summary info on the data we have - how many locations, how many of them have plum, what countries, cities, etc.
 

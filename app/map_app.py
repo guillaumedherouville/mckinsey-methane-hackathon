@@ -15,7 +15,6 @@ def display_historical_data_for_city(city, city_data, data):
     if city == "Example (mock data): Paris":
         city_data = dummydata()
         city_data["date"] = pd.to_datetime(city_data["date"])
-        # city_data["date"] = pd.to_datetime(dummy_data["date"])
         st.markdown(f"🚨 Methane was detected in {city} 🚨")
     else:
         latitude, longitude = get_lat_lon(city, city_data)
@@ -90,28 +89,17 @@ def dummydata():
     return data
 
 
-# def display_city_name_1(city, city_data):
-#     """
-#     need to prettify the plot
-#     """
-#     st.markdown(f"Selected City: {city}")
-#     st.map(data=city_data)
-#     st.dataframe(city_data)
-#     city_data["date"] = pd.to_datetime(city_data["date"])
-#     city_data["plume"] = city_data["plume"].apply(lambda x: 1 if x == "yes" else 0)
-#     city_data = city_data.sort_values(by="date")
-#     plt.figure(figsize=(10, 4))
-#     plt.plot(city_data["date"], city_data["plume"], marker="o")
-#     plt.title(f"Methane Detection over Time in {city}")
-#     plt.xlabel("Date")
-#     plt.ylabel("Plume (1 for yes, 0 for no)")
-#     plt.grid()
-#     plt.show()
-#     st.pyplot(plt)
-
-
 def historical_data():
     st.title("Methane Data Analysis")
+
+    st.info(
+        f"Welcome to the satellite image analysis portal. "
+        f"Here you can delve into historical results and analysis of satellite images that were uploaded.\n"
+        f"By using mock data for Paris as an example, we offer you a glimpse of how the information would "
+        f"appear in the event of methane leakages appearing in a location where they were previously undetected.\n\n"
+        f"Take a virtual tour through the data to see how we can monitor and respond to unexpected methane events, "
+        f"enhancing our collective efforts in environmental stewardship."
+    )
 
     df = pd.read_csv("data/dataset/train_data/metadata.csv")
     df_plum = df[["lat", "lon", "plume"]]
