@@ -45,3 +45,5 @@ To navigate the project, we suggest :
 -> Alternatively, you can run 'mkdocs serve' in your terminal to have a local host
   
 - Run the app on https:// ...   (for a more extensive description, see the documentation)
+
+- See model specification in the "model" section of the documentation
