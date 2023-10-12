@@ -9,7 +9,11 @@ import rasterio
 import cv2
 
 def image_upload():
-    """ """
+    """Upload images to streamlit app with this function
+
+    Returns:
+        np.array: The normalized image in greyscale format (64x64)
+    """
     # Create a file uploader
     uploaded_file = st.file_uploader("Upload a TIFF Image", type=["tif", "tiff"])
 
@@ -50,7 +54,15 @@ def model_choice():
     return model
 
 def prediction(model, image):
-    ''' '''
+    """load the model and upload the prediction
+
+    Args:
+        model (tf.keras.model): The fitted model instance
+        image (np.array): Greyscale image of infrared sattelite image (64x64)
+
+    Returns:
+        tf.keras.model: The loaded model
+    """
     with st.status("Predicting label", expanded=True) as status:
         st.header(model)
         running_model = keras.models.load_model("model/" + model)
@@ -64,6 +76,12 @@ def prediction(model, image):
 
 
 def heatmap_box(running_model, image):
+    """Produce the heatmap
+
+    Args:
+        running_model (tf.keras.model): The model to infer with
+        image (np.array): The image to plot as heatmap
+    """
     from heatmap import heatmap
     
     # get last layer
