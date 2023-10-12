@@ -55,7 +55,6 @@ def image_upload(input_type):
     Returns:
         np.array: The normalized image in greyscale format (64x64)
     """
-    st.title("Methane Detection")
     if input_type == "Upload":
         source_file = st.file_uploader("Upload a TIFF Image", type=["tif", "tiff"])
     else:
@@ -178,6 +177,19 @@ def methane_detection():
     Perform methane detection by selecting a model,
     choosing an image (demo or upload), and displaying results.
     """
+    st.title("Methane Detection")
+    st.info(
+        f"Welcome Methane Detectio portal."
+        f"The Methane Monitoring Application harnesses a robust Convolutional Neural Network (CNN) model, "
+        f"crafted using advanced software from reputable organizations like Meta. "
+        f"Designed for real-time methane plume detection, users can upload satellite images to the app, "
+        f"which promptly analyzes them to identify methane presence. Additionally, "
+        f"it generates intuitive heatmaps of the images, aiding users in visually identifying "
+        f"the concentration and dispersion of methane plumes. This fusion of cutting-edge technology "
+        f"and user-centric features, alongside real-time analytical capabilities, positions "
+        f"the Methane Monitoring Application as a reliable and effective tool for environmental "
+        f"safety and methane emissions monitoring."
+    )
     source_image = image_choice()
     model = model_choice()
     image = image_upload(source_image)
@@ -186,3 +198,4 @@ def methane_detection():
 
     running_model = prediction(model, image)
     heatmap_box(running_model, image)
+
