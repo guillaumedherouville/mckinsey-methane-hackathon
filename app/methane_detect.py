@@ -12,6 +12,9 @@ def image_upload():
     """
     Display a TIFF image uploaded by the user.
     If an image is uploaded, it is displayed in the Streamlit app.
+
+    Returns:
+        np.array: The normalized image in greyscale format (64x64)
     """
     st.title("Methane Detection")
     # Create a file uploader
@@ -56,6 +59,7 @@ def model_choice():
     return model
 
 def prediction(model, image):
+
     """
     Predict a label and probability for an image using a given model.
 
@@ -90,8 +94,18 @@ def heatmap_box(running_model, image):
         image (numpy.ndarray): The input image as a NumPy array.
     """
 
-    from heatmap import  heatmap
+
+def heatmap_box(running_model, image):
+    """Produce the heatmap
+
+    Args:
+        running_model (tf.keras.model): The model to infer with
+        image (np.array): The image to plot as heatmap
+    """
+    from heatmap import heatmap
     # Find the last convolutional layer in the model
+    # get last layer
+
     last_conv_layer = None
     for layer in running_model.layers[::-1]:
         if isinstance(layer, keras.layers.Conv2D):
