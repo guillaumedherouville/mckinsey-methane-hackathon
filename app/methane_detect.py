@@ -179,7 +179,7 @@ def methane_detection():
     """
     st.title("Methane Detection")
     st.info(
-        f"Welcome Methane Detectio portal."
+        f"Welcome Methane Detectio portal ! \n\n"
         f"The Methane Monitoring Application harnesses a robust Convolutional Neural Network (CNN) model, "
         f"crafted using advanced software from reputable organizations like Meta. "
         f"Designed for real-time methane plume detection, users can upload satellite images to the app, "
