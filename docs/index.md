@@ -1,6 +1,4 @@
 # Methane-hackathon
-This is a copy of the README
-
 A methane detection project using satellite images
 
 ##  Requirements
