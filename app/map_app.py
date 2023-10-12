@@ -10,7 +10,7 @@ def get_lat_lon(city_name, data):
     else:
         return None
 
-def display_city_name(city, city_data, data):
+def display_historical_data_for_city(city, city_data, data):
     """
     need to prettify the plot
     """
@@ -121,7 +121,7 @@ def historical_data():
             "Enter Longitude:", value=default_longitude)
         display_map_with_location(latitude, longitude)
     else:
-        display_city_name(location_option, cities_data, df)
+        display_historical_data_for_city(location_option, cities_data, df)
 
 
 
