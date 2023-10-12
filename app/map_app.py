@@ -15,15 +15,24 @@ def display_historical_data_for_city(city, city_data, data):
     need to prettify the plot
     """
     st.markdown(f"Selected City: {city}")
+
     latitude, longitude = get_lat_lon(city, city_data)
     st.map(data={"LAT": [latitude], "LON": [longitude]})
     city_data = data[(data["lat"] == latitude) & (data["lon"] == longitude)]
     city_data["date"] = pd.to_datetime(city_data["date"], format="%Y%m%d")
     st.dataframe(city_data)
+    if len(city_data[city_data["plume"] == "yes"]) == 0:
+        st.markdown(f"The presence of methane was never detected at this location! 🥳")
+    if len(city_data[city_data["plume"] == "no"]) == 0:
+        st.markdown(f"The presence of methane is stable in this region 😔")
+    if len(city_data[city_data["plume"] == "no"]) > 0 and city_data[city_data['date'] == city_data['date'].max()]['plume'].values[0] == "yes":
+        st.markdown(f"🚨 Methane was detected in this area recently 🚨")
+
+
     city_data["plume"] = city_data["plume"].apply(
         lambda x: 1 if x == "yes" else 0)
     city_data = city_data.sort_values(by="date")
-    plt.figure(figsize=(10, 4))
+    plt.plot(figsize=(10, 4))
     plt.plot(city_data["date"], city_data["plume"], marker="o")
     plt.title(f"Methane Detection over Time in {city}")
     plt.xlabel("Date")
@@ -39,7 +48,7 @@ def display_map_with_location(latitude, longitude):
 def dummydata():
     data = pd.DataFrame({'date': ['2023-02-28 00:00:00', '2023-02-13 00:00:00', '2023-03-05 00:00:00'],
     'id_coord': ['id_0001', 'id_0001', 'id_0001'],
-    'plume': ['no', 'yes', 'no'],
+    'plume': ['no', 'no', 'yes'],
     'set': ['train', 'train', 'train'],
     'lat': [48.86, 48.86, 48.86],
     'lon': [2.35, 2.35, 2.35],
@@ -121,7 +130,7 @@ def historical_data():
             "Enter Longitude:", value=default_longitude)
         display_map_with_location(latitude, longitude)
     else:
-        display_historical_data_for_city(location_option, cities_data, df)
+        display_historical_data_for_city(location_option, cities_data, df[["date", "id_coord", "plume", "lat", "lon"]])
 
 
 

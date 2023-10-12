@@ -141,10 +141,10 @@ def cleanr_display():
 
     """
 
-    df = pd.read_csv("../data/dataset/train_data/metadata.csv")
+    df = pd.read_csv("data/dataset/train_data/metadata.csv")
 
     # Extract unique cities from the train data
-    cities_data = pd.read_csv("locations_with_cities.csv")
+    cities_data = pd.read_csv("app/locations_with_cities.csv")
     unique_cities = cities_data["city"].unique()
 
     # User input: choose city from a dropdown or set location with latitude and longitude
