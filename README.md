@@ -44,6 +44,6 @@ To navigate the project, we suggest :
 - View the documentation on https:// ...
 -> Alternatively, you can run 'mkdocs serve' in your terminal to have a local host
   
-- Run the app on https:// ...   (for a more extensive description, see the documentation)
+- Run the app with ```streamlit run  app/streamlit-app.py```  (for a more extensive description, see the documentation)
 
 - See model specification in the "model" section of the documentation
