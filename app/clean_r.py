@@ -42,11 +42,9 @@ def generate_manufacturers_list_from_location(latitude, longitude, city, api_key
         return None, None
 
     start_phrase = "List of manufacturers in this area:"
-    regulator_phrase = "List of regulators in this area:"
-
-    manufacturers_matches = re.compile(
-        f"{re.escape(start_phrase)}(.*?){re.escape(regulator_phrase)}", re.DOTALL
-    ).search(prediction["message"]["content"])
+    manufacturers_matches = re.search(
+        f"{re.escape(start_phrase)}(.*)", prediction["message"]["content"], re.DOTALL
+    )
     manufacturers = (
         manufacturers_matches.group(1)
         if manufacturers_matches
@@ -159,41 +157,25 @@ def cleanr_display():
     if location_option == "Select Location":
         pass
     elif location_option == "Add New Location":
+        api_key = st.text_input("Enter you API_KEY to access new location discovery:")
         latitude = st.number_input("Enter Latitude:")
         longitude = st.number_input("Enter Longitude:")
 
-        # Button to trigger the discovery of a new location
         if st.button("Discover New Location"):
-            if latitude is not None and longitude is not None:
-                if api_key == "":
-                    st.warning(
-                        "Please set you API_KEY to access new location discovery."
-                    )
-                    api_key = st.text_input("Enter a key:")
-                    if st.button("Submit Key"):
-                        if api_key != "":
-                            discover_location(latitude, longitude, None, api_key)
-                        else:
-                            st.warning("Please enter a valid key.")
-                else:
-                    discover_location(latitude, longitude, None, api_key)
-            else:
+            if latitude is not None and longitude is not None and api_key != "":
+                discover_location(latitude, longitude, None, api_key)
+
+            elif api_key == "":
+                st.warning("Please set you API_KEY to access new location discovery.")
+            elif latitude is None or longitude is None:
                 st.warning(
                     "Please fill in both latitude and longitude before discovering a new location."
                 )
 
     else:
-        display_historical_data_for_city(location_option, cities_data, df)
+        api_key = st.text_input("Enter you API_KEY to access new location discovery:")
         if api_key == "":
-            st.warning(
-                f"Please set you API_KEY to discover oppportunities in {location_option}."
-            )
-            api_key = st.text_input("Enter a key:")
-            if st.button("Submit Key"):
-                if api_key != "":
-                    discover_location(None, None, location_option, api_key)
-                else:
-                    st.warning("Please enter a valid key.")
-
+            st.warning("Please set you API_KEY to access new location discovery.")
         else:
+            display_historical_data_for_city(location_option, cities_data, df)
             discover_location(None, None, location_option, api_key)
