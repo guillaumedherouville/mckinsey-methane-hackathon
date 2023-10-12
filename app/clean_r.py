@@ -111,7 +111,7 @@ def generate_regulators_list_from_location(latitude, longitude, city, api_key):
 
 def discover_location(latitude, longitude, city, api_key):
     loading_message = (
-        f"Discovering oportunities in {city}..."
+        f"Discovering opportunities in {city}..."
         if city is not None
         else f"Discovering new location..."
     )
