@@ -3,6 +3,7 @@ site_name: Methane detection project
 nav:
   - ReadMe : index.md
   - App : app_doc.md
+  - Model : model_training.md
 
 theme:
   name: 'material'

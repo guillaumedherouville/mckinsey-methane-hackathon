@@ -1,25 +1,31 @@
 # Streamlit App
 The following page introduces the streamlit app and its basic functions
 
-The app is available at the following link : 
-https:// ....
+You can run the app with ```streamlit run app/streamlit-app.py``` in your terminal.
 
 ## Description
-The app is divided in two parts :
+The app is divided in three portals :
 
 ### Methane detection
-Asks the user to upload a .tif image for methane detection. 
 
-Different models and parameters are available.
+The goal of this display is to detect the presence of methane in a satellite image.
+The user can either use one of the demo images, or upload a .tif image of his choice. 
 
-Output : likelihood of methane presence
+Different models are available for comparison, and a heatmap can also be shown over the image to highlight the most important datapoints - i.e. the plume, in the case of presence of methane.
 
 ### Metadata analysis 
-Analysis of already available data on methane leakages in various areas.
 
-1/ Map showing the data points with or without plume
+This page provides an analysis of already available data on methane leakages in various areas. It has two main parts:
 
-2/ Possibility to explore different cities on the map (with or without plume), and add location given coordinate points.
+1/ A map showing where available images are located, with a red dot for methane leakages and a green one for clean areas
 
+2/ A deep-dive of each location available, with its coordinates, methane detection history and appropriate dataframe.
+It also gives the possibility to explore new locations given coordinate points.
+
+### CleanR workspace
+
+This dashboard is meant to be used by CleanR only. 
+
+For each location available - or any new location of your choice -, it will provide the company with potential customers and partners in the area, to work together on solving methane-related issues.
 
 

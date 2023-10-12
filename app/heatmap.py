@@ -9,7 +9,6 @@ import io
 
 class heatmap:
     def make_heatmap(self, img_array, model, last_conv_layer_name):
-
         # First, we create a model that maps the input image to the activations
         # of the last conv layer as well as the output predictions
         grad_model = keras.models.Model(

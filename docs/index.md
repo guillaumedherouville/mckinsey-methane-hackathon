@@ -1,5 +1,8 @@
 # Methane-hackathon
 A methane detection project using satellite images
+This is a copy of the ReadMe.
+
+-> View the documentation on [Github Pages](https://guillaumedherouville.github.io/mckinsey-methane-hackathon/)
 
 ##  Requirements
 
@@ -37,11 +40,10 @@ methane-hackathon
 ## Running the project
 To navigate the project, we suggest :
 
-- View the documentation with 'mkdocs-serve' (to be hosted on github pages when the repo will be made public)
+- View the documentation on https:// ...
+-> Alternatively, you can run 'mkdocs serve' in your terminal to have a local host
   
-- Run the app on https:// ...   (for more details, see the documentation)
+- Run the app with ```streamlit run app/streamlit-app.py```  (for a more extensive description, see the documentation)
 
-## To-do list:
-- Create tests
-- Finish the app
-- Add docstrings
+- See model specification in the "model" section of the documentation
+

@@ -4,11 +4,11 @@ import streamlit as st
 import pandas as pd
 from map_app import display_historical_data_for_city
 
-OPEN_AI_KEY = ""
-openai.api_key = OPEN_AI_KEY
+OPEN_API_KEY = ""
 
 
-def generate_manufacturers_list_from_location(latitude, longitude, city):
+def generate_manufacturers_list_from_location(latitude, longitude, city, api_key):
+    openai.api_key = api_key
     if city is None:
         prompt = (
             f"I will give you latitude and longitude, i want you to say the name of the city or region and give me lists of 3 main compnaies-manufacturers in that region.\n\n"
@@ -42,11 +42,9 @@ def generate_manufacturers_list_from_location(latitude, longitude, city):
         return None, None
 
     start_phrase = "List of manufacturers in this area:"
-    regulator_phrase = "List of regulators in this area:"
-
-    manufacturers_matches = re.compile(
-        f"{re.escape(start_phrase)}(.*?){re.escape(regulator_phrase)}", re.DOTALL
-    ).search(prediction["message"]["content"])
+    manufacturers_matches = re.search(
+        f"{re.escape(start_phrase)}(.*)", prediction["message"]["content"], re.DOTALL
+    )
     manufacturers = (
         manufacturers_matches.group(1)
         if manufacturers_matches
@@ -56,7 +54,8 @@ def generate_manufacturers_list_from_location(latitude, longitude, city):
     return region, manufacturers
 
 
-def generate_regulators_list_from_location(latitude, longitude, city):
+def generate_regulators_list_from_location(latitude, longitude, city, api_key):
+    openai.api_key = api_key
     if city is None:
         prompt = (
             f"I will give you latitude and longitude, i want you to give me lists of 3 ESG regulators and lists of 3 research institutions that may be responsible for this region and may be interested in methane detection. \n\n"
@@ -110,22 +109,22 @@ def generate_regulators_list_from_location(latitude, longitude, city):
     return regulators, researchers
 
 
-def discover_location(latitude, longitude, city):
+def discover_location(latitude, longitude, city, api_key):
     loading_message = (
-        f"Discovering oportunities in {city}..."
+        f"Discovering opportunities in {city}..."
         if city is not None
         else f"Discovering new location..."
     )
     with st.spinner(loading_message):
         region_name, manufacturers_list = generate_manufacturers_list_from_location(
-            latitude, longitude, city
+            latitude, longitude, city, api_key
         )
     if city is None:
         st.markdown(f"Region: {region_name}")
     st.markdown(f"List of main manufacturers in this region:\n {manufacturers_list}")
     with st.spinner(loading_message):
         regulators_list, researchers_list = generate_regulators_list_from_location(
-            latitude, longitude, city
+            latitude, longitude, city, api_key
         )
     st.markdown(f"List of main ESG regulators in this region:\n {regulators_list}")
     st.markdown(
@@ -134,7 +133,23 @@ def discover_location(latitude, longitude, city):
 
 
 def cleanr_display():
+    api_key = ""
     st.title("CleanR Workspace")
+
+    st.info(
+        f"Welcome to CleanR Workspace!\n"
+        f"Here, we provide a comprehensive repository of analyzed data, both from past assessments and new locations. "
+        f"Whether you're looking to explore previously examined areas or discover fresh sites, "
+        f"we offer you valuable insights into potential methane clients.\n\n"
+        f"The potential beneficiaries of methane detection model can be categorized into three main groups:\n"
+        f"1. Manufacturers: For businesses in the energy sector, staying compliant with Environmental, Social, and Governance standards is vital."
+        f"The data can help them monitor methane emissions, attract investment, and enhance operational efficiency.\n\n"
+        f"2. Regulators: Regulators play a crucial role in ensuring that producers adhere to environmental regulations. "
+        f"Our platform assists regulators in cross-checking reported methane emissions, supporting their efforts in upholding compliance standards.\n\n"
+        f"3. Research Institutions: For academic and research institutions, tracking and studying methane leakages "
+        f"are essential in understanding environmental patterns and resource utilization. "
+        f"Our data enables research institutions to explore, analyze, and gain insights into methane emissions and leakages."
+    )
 
     """
     add some summary info on the data we have - how many locations, how many of them have plum, what countries, cities, etc.
@@ -157,26 +172,25 @@ def cleanr_display():
     if location_option == "Select Location":
         pass
     elif location_option == "Add New Location":
+        api_key = st.text_input("Enter you API_KEY to access new location discovery:")
         latitude = st.number_input("Enter Latitude:")
         longitude = st.number_input("Enter Longitude:")
 
-        # Button to trigger the discovery of a new location
         if st.button("Discover New Location"):
-            if latitude is not None and longitude is not None:
-                if OPEN_AI_KEY == "":
-                    st.warning("Please set you API_KEY to access new location discovery.")
-                else:
-                    discover_location(latitude, longitude, None)
-            else:
+            if latitude is not None and longitude is not None and api_key != "":
+                discover_location(latitude, longitude, None, api_key)
+
+            elif api_key == "":
+                st.warning("Please set you API_KEY to access new location discovery.")
+            elif latitude is None or longitude is None:
                 st.warning(
                     "Please fill in both latitude and longitude before discovering a new location."
                 )
 
     else:
-        display_historical_data_for_city(location_option, cities_data, df)
-        if OPEN_AI_KEY == "":
-            st.warning(
-                f"Please set you API_KEY discover oppportunities in {location_option}."
-            )
+        api_key = st.text_input("Enter you API_KEY to access new location discovery:")
+        if api_key == "":
+            st.warning("Please set you API_KEY to access new location discovery.")
         else:
-            discover_location(None, None, location_option)
+            display_historical_data_for_city(location_option, cities_data, df)
+            discover_location(None, None, location_option, api_key)
