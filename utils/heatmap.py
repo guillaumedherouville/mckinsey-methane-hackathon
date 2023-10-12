@@ -30,7 +30,7 @@ class heatmap:
 
         # Then, we compute the gradient of the top predicted class for our input image
         # with respect to the activations of the last conv layer
-        with tf.GradientTape() as tape:
+        with tf.() as tape:
             last_conv_layer_output, preds = grad_model(img_array)
             pred_index = tf.argmax(preds[0])
             class_channel = preds[:, pred_index]
@@ -65,7 +65,7 @@ class heatmap:
         Returns:
             matplotlib.pyplot.Figure: The resulting image with overlay.
         """
-        
+
         plt.imshow(image, cmap="gray")
         plt.imshow(cv2.resize(heatmap, (64, 64)),alpha=0.4)
         plt.savefig("data/save_fig/fig_saved.png")
